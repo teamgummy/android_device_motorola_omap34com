@@ -45,23 +45,26 @@ PRODUCT_PACKAGES += \
 
 # ICS graphics
 PRODUCT_PACKAGES += \
-	libEGL libGLESv2 libGLESv1_CM libgtest
+	libEGL libGLESv2 libGLESv1_CM \
+	libdsswbhal ti_wfd_libs
+ifeq ($(TARGET_USES_ION),true)
+PRODUCT_PACKAGES += libion
+endif
 
 # Jpeg hw encoder/decoder
 PRODUCT_PACKAGES += \
-	libstagefrighthw \
-	libOMX.TI.JPEG.Encoder libOMX.TI.JPEG.decoder \
+	libstagefrighthw
 
 # DSP
 PRODUCT_PACKAGES += \
-	dspexec libbridge
+	cexec.out
 
 # OMX
 PRODUCT_PACKAGES += \
-	libLCML \
 	libOMX_Core \
 	libOMX.TI.AAC.decode \
 	libOMX.TI.AAC.encode \
+	libOMX.TI.AMR.encode \
 	libOMX.TI.AMR.decode \
 	libOMX.TI.MP3.decode \
 	libOMX.TI.Video.Decoder \
@@ -69,7 +72,12 @@ PRODUCT_PACKAGES += \
 	libOMX.TI.WBAMR.decode \
 	libOMX.TI.WBAMR.encode \
 	libOMX.TI.WMA.decode \
-	libOMX.TI.VPP
+	libOMX.TI.JPEG.encoder \
+	libOMX.TI.JPEG.decoder \
+	libOMX.TI.ILBC.decode \
+	libOMX.TI.ILBC.encode \
+	libOMX.TI.VPP \
+#	libLCML
 
 # Wifi
 PRODUCT_PACKAGES += \
@@ -85,10 +93,10 @@ PRODUCT_COPY_FILES += \
 # Core
 PRODUCT_PACKAGES += \
 	mot_boot_mode charge_only_mode \
-	lights.omap3 e2fsck usbd ping6
+	lights.omap3 usbd ping6
 
 # Apps and bin
-PRODUCT_PACKAGES += Superuser su FileManager Torch Usb
+PRODUCT_PACKAGES += Superuser su FileManager Torch Usb GanOptimizer
 
 # Live Wallpapers
 PRODUCT_PACKAGES += \
@@ -111,25 +119,6 @@ PRODUCT_COPY_FILES := \
 	$(DEVICE_PREBUILT)/usr/keychars/cpcap-key.kcm:system/usr/keychars/cpcap-key.kcm \
 	$(DEVICE_PREBUILT)/usr/keychars/qtouch-touchscreen.kcm:system/usr/keychars/qtouch-touchscreen.kcm \
 	$(DEVICE_PREBUILT)/usr/keychars/sholes-keypad.kcm:system/usr/keychars/sholes-keypad.kcm
-
-# Graphics
-PRODUCT_COPY_FILES += \
-	$(DEVICE_PREBUILT)/imgtec/pvrsrvinit:system/bin/pvrsrvinit \
-	$(DEVICE_PREBUILT)/imgtec/libEGL_POWERVR_SGX530_125.so:system/lib/egl/libEGL_POWERVR_SGX530_125.so \
-	$(DEVICE_PREBUILT)/imgtec/libGLESv1_CM_POWERVR_SGX530_125.so:system/lib/egl/libGLESv1_CM_POWERVR_SGX530_125.so \
-	$(DEVICE_PREBUILT)/imgtec/libGLESv2_POWERVR_SGX530_125.so:system/lib/egl/libGLESv2_POWERVR_SGX530_125.so \
-	$(DEVICE_PREBUILT)/imgtec/libglslcompiler.so:system/lib/libglslcompiler.so \
-	$(DEVICE_PREBUILT)/imgtec/libHPImgApi.so:system/lib/libHPImgApi.so \
-	$(DEVICE_PREBUILT)/imgtec/libIMGegl.so:system/lib/libIMGegl.so \
-	$(DEVICE_PREBUILT)/imgtec/libpvr2d.so:system/lib/libpvr2d.so \
-	$(DEVICE_PREBUILT)/imgtec/libpvrANDROID_WSEGL.so:system/lib/libpvrANDROID_WSEGL.so \
-	$(DEVICE_PREBUILT)/imgtec/libsrv_init.so:system/lib/libsrv_init.so \
-	$(DEVICE_PREBUILT)/imgtec/libsrv_um.so:system/lib/libsrv_um.so \
-	$(DEVICE_PREBUILT)/imgtec/libusc.so:system/lib/libusc.so \
-	$(DEVICE_PREBUILT)/imgtec/libeglinfo.so:system/lib/egl/libeglinfo.so \
-	$(DEVICE_PREBUILT)/imgtec/libgles1_texture_stream.so:system/lib/egl/libgles1_texture_stream.so \
-	$(DEVICE_PREBUILT)/imgtec/libgles2_texture_stream.so:system/lib/egl/libgles2_texture_stream.so \
-	$(DEVICE_PREBUILT)/imgtec/gralloc.omap3.so:system/lib/hw/gralloc.omap3.so
 
 # DSP
 PRODUCT_COPY_FILES += \
@@ -166,10 +155,9 @@ PRODUCT_COPY_FILES += \
 	$(DEVICE_PREBUILT)/etc/inetd.conf:system/etc/inetd.conf \
 	$(DEVICE_PREBUILT)/etc/gps.conf:system/etc/gps.conf \
 	$(DEVICE_PREBUILT)/etc/media_profiles.xml:system/etc/media_profiles.xml \
-	$(DEVICE_PREBUILT)/etc/powervr.ini:system/etc/powervr.ini \
+	$(DEVICE_PREBUILT)/etc/profile:system/etc/profile \
 	$(DEVICE_PREBUILT)/etc/vold.fstab:system/etc/vold.fstab \
 	$(DEVICE_PREBUILT)/etc/sysctl.conf:system/etc/sysctl.conf \
-	$(DEVICE_PREBUILT)/etc/init.d/06ion:system/etc/init.d/06ion \
 	$(DEVICE_PREBUILT)/etc/init.d/12scheduler:system/etc/init.d/12scheduler \
 	$(DEVICE_PREBUILT)/etc/init.d/13kernel:system/etc/init.d/13kernel \
 	$(DEVICE_PREBUILT)/etc/init.d/14multitouch:system/etc/init.d/14multitouch \
@@ -202,10 +190,6 @@ PRODUCT_COPY_FILES += \
 	$(DEVICE_PREBUILT)/bin/hijack:system/bin/hijack \
 	$(DEVICE_PREBUILT)/bin/hijack.log_dump:system/bin/hijack.log_dump \
 
-# HWUI Blacklist
-PRODUCT_COPY_FILES += \
-	device/motorola/omap34com/hwui-whitelist.txt:system/hwui-whitelist.txt
-
 # Copy all common kernel modules
 PRODUCT_COPY_FILES += $(shell \
 	find device/motorola/omap34com/modules -name '*.ko' \
@@ -236,25 +220,23 @@ PRODUCT_PROPERTY_OVERRIDES += \
 	ro.vold.umsdirtyratio=20 \
 	ro.usb.use_custom_service=1 \
 	ro.kernel.android.checkjni=0 \
-	ro.HOME_APP_ADJ=1 \
+	dalvik.vm.dexopt-flags=m=y,v=n,o=v,u=n \
+	dalvik.vm.execution-mode=int:jit \
+	dalvik.vm.heapstartsize=5m \
+	dalvik.vm.heapsize=128m \
 	dalvik.vm.checkjni=false \
 	dev.pm.dyn_samplingrate=1 \
 	debug.enabletr=false \
 	ro.sf.lcd_density=240 \
 	ro.min_pointer_dur=10 \
 	ro.opengles.version=131072 \
-	hwui.render_dirty_regions=false \
 	wifi.interface=tiwlan0 \
 	wifi.supplicant_scan_interval=180 \
 	wifi.hotspot.ti=1 \
 	wifi.ap.interface=tiap0 \
-	windowsmgr.max_events_per_sec=150 \
-	com.ti.omap_compat=1
-
-ifdef OMAP_ENHANCEMENT
-PRODUCT_PROPERTY_OVERRIDES += \
+	windowsmgr.max_events_per_sec=300 \
+	com.ti.omap_compat=1 \
 	com.ti.omap_enhancement=true
-endif
 
 # we have enough storage space to hold precise GC data
 PRODUCT_TAGS += dalvik.gc.type-precise
@@ -265,3 +247,4 @@ PRODUCT_LOCALES += en_US
 $(call inherit-product, frameworks/base/build/phone-hdpi-512-dalvik-heap.mk)
 $(call inherit-product, hardware/ti/omap3/Android.mk)
 $(call inherit-product-if-exists, vendor/motorola/omap34com/device-vendor.mk)
+$(call inherit-product-if-exists, vendor/motorola/ti_sgx_es5.x/sgx-vendor.mk)
