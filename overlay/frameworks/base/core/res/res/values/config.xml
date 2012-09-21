@@ -81,9 +81,10 @@
          Must be overridden in platform specific overlays -->
     <integer-array name="config_autoBrightnessLevels">
         <item>100</item>
+        <item>200</item>
+        <item>400</item>
+        <item>1000</item>
         <item>3000</item>
-        <item>8000</item>
-        <item>8000</item>
     </integer-array>
 
     <!-- Array of output values for LCD backlight corresponding to the LUX values
@@ -91,11 +92,12 @@
          than the size of the config_autoBrightnessLevels array.
     -->
     <integer-array name="config_autoBrightnessLcdBacklightValues">
-        <item>42</item>
-        <item>96</item>
-        <item>208</item>
-        <item>246</item>
-        <item>246</item>
+        <item>16</item>
+        <item>40</item>
+        <item>70</item>
+        <item>70</item>
+        <item>100</item>
+        <item>250</item>
     </integer-array>
 
     <!-- Array of output values for button backlight corresponding to the LUX values
@@ -104,7 +106,8 @@
     -->
     <integer-array name="config_autoBrightnessButtonBacklightValues">
         <item>255</item>
-        <item>0</item>
+        <item>255</item>
+        <item>255</item>
         <item>0</item>
         <item>0</item>
         <item>0</item>
@@ -116,6 +119,7 @@
          Crespo has no keyboard so all values are zero.
     -->
     <integer-array name="config_autoBrightnessKeyboardBacklightValues">
+        <item>255</item>
         <item>255</item>
         <item>255</item>
         <item>0</item>
@@ -151,7 +155,7 @@
         <item>"mobile_fota,10,0,2,60000,true"</item>
         <item>"mobile_ims,11,0,2,60000,true"</item>
         <item>"mobile_cbs,12,0,2,60000,true"</item>
-        <item>"wifi_p2p,13,1,0,-1,true"</item>
+        <item>"wifi_p2p,13,1,0,-1,false"</item>
     </string-array>
 
     <!-- An Array of "[ConnectivityManager connectionType],
